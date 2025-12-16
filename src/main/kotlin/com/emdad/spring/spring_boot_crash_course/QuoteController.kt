@@ -27,7 +27,7 @@ class QuoteController {
             quotes.filter {
                 it.content.contains(query, ignoreCase = true)
             }
-        }else quotes
+        } else quotes
     }
 
     @PostMapping
@@ -49,15 +49,18 @@ class QuoteController {
 
     @DeleteMapping("/{id}")
     fun deleteQuote(
-        @PathVariable("id")id: Long
-    ): ResponseEntity<Void> {
+        @PathVariable("id") id: Long
+    ) {
         val quoteToDelete = quotes.find { it.id == id }
-        return if (quoteToDelete != null) {
+        if (quoteToDelete != null) {
             quotes.remove(quoteToDelete)
-            ResponseEntity.ok().build()
-        }else{
-            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+//            ResponseEntity.ok().build()
+        } else {
+//            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+//            throw ResponseStatusException(HttpStatus.NOT_FOUND)
+            throw QuotesNotFoundException(id)
         }
+
     }
 
 }
