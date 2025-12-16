@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.server.ResponseStatusException
 
@@ -18,8 +19,14 @@ class QuoteController {
     val quotes = mutableListOf<QuoteDto>()
 
     @GetMapping()
-    fun loadQuotes(): List<QuoteDto> {
-        return quotes
+    fun loadQuotes(
+        @RequestParam(value = "q", required = false) query: String?
+    ): List<QuoteDto> {
+        return if (query != null) {
+            quotes.filter {
+                it.content.contains(query, ignoreCase = true)
+            }
+        }else quotes
     }
 
     @PostMapping
